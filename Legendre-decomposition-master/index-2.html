@@ -1,0 +1,65 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>未知 </title></head><body>
+<h1 id="legendre-decomposition-for-tensors">Legendre Decomposition for Tensors</h1>
+<p>An implementation of Legendre decomposition for tensors, which decomposes a given nonnegative tensor into a multiplicative combination of parameters.
+Current implementation supports only third order tensors and zero or nonnegative values are directly ignored.
+Please see the following paper for more details:
+* Sugiyama, M., Nakahara, H., Tsuda, K.: <strong>Legendre Decomposition for Tensors</strong>, NIPS 2018 (to appear).</p>
+<h2 id="usage">Usage</h2>
+<h3 id="in-your-program">In your program</h3>
+<p>You can perform tensor balancing by calling the function <code>LegendreDecomposition</code>.
+To use it, you just need to include the header file "legendre_decomposition.h" in your program.
+The code is written in C++11 and the <a href="http://eigen.tuxfamily.org">Eigen</a> library is needed.  </p>
+<p>The main function <code>LegendreDecomposition</code> is defined as:
+<code>double LegendreDecomposition(Tensor&amp; X, Int core_size, double error_tol, double rep_max, bool verbose, int type, int const_type, int *num_param)</code>
+<em> <code>X</code>: an input tensor, the type <code>Tensor</code> is defined as <code>vector&lt;vector&lt;vector&lt;double&gt;&gt;&gt;</code><br />
+</em> <code>core_size</code>: the parameter for a decomposition basis<br />
+<em> <code>error_tol</code>: error tolerance<br />
+</em> <code>rep_max</code>: the maximum number of iteration<br />
+<em> <code>verbose</code>: the verbose mode if true<br />
+</em> <code>type</code>: type of an algorithm<br />
+  * <code>type == 1</code> Natural gradient (recommended)<br />
+  * <code>type == 2</code> Gradient descent<br />
+<em> <code>const_type</code>: type of a decomposition basis (currently can be 1 [complex] or 2 [simple])<br />
+</em> <code>num_param</code>: the number of parameters will be returned<br />
+* Return value: the number of iterations</p>
+<h3 id="in-terminal">In terminal</h3>
+<p>We provide a sample tensor "test.csv" and a test code "main.cc" to try the code, which includes an input and output interface for tensor files.</p>
+<p>For example, in the directory <code>src/cc</code>:
+```
+$ make
+$ ./ld -d 4 -i test.csv -c 2</p>
+<blockquote>
+<p>Read a database file "test.csv":
+  Size: (3, 5, 4)
+        (Note: this is treated as (4, 3, 5) inside the implementation)
+Start Legendre decomposition by natural gradient:
+  Number of parameters: 19
+  Step  1, Residual: 0.00419722
+  Step  2, Residual: 2.08951e-05
+  Step  3, Residual: 5.15477e-10
+Profile:
+  Number of iterations: 3
+  Running time:         0.000205 [sec]
+  RMSE:                 0.222512
+```
+To compile the program, please edit paths in the "Makefile" according to the location of the Eigen library in your environment.</p>
+</blockquote>
+<h4 id="command-line-arguments">Command-line arguments</h4>
+<ul>
+<li><code>-i &lt;input_file&gt;</code>: a path to a csv file of an input tensor (without row and column names)  </li>
+<li><code>-o &lt;output_matrix_file&gt;</code>: an output file of the reconstructed tensor  </li>
+<li><code>-t &lt;output_stat_file&gt;</code>: an output file of statistics  </li>
+<li><code>-e &lt;error_tolerance&gt;</code>: error tolerance is set to 1e-<code>&lt;error_tolerance&gt;</code> [default value: 5]  </li>
+<li><code>-r &lt;max_iteration&gt;</code>: the maximum number of iterations is set to 1e+<code>&lt;max_iteration&gt;</code> [default value: 6]  </li>
+<li><code>-v</code>: the verbose mode if specified  </li>
+<li><code>-n</code>: the natural gradient is used  </li>
+<li><code>-g</code>: the gradient descent is used  </li>
+<li><code>-d</code>: the depth size (the number of matrices)  </li>
+<li><code>-c</code>: the parameter for a decomposition basis  </li>
+<li><code>-b</code>: type of a decomposition basis [default value: 1]  </li>
+</ul>
+<h2 id="contact">Contact</h2>
+<p>Author: Mahito Sugiyama<br />
+Affiliation: National Institute of Informatics, Tokyo, Japan<br />
+E-mail: mahito@nii.ac.jp</p>
+</body></html>
